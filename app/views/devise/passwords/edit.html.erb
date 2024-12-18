@@ -1,0 +1,46 @@
+<div class="row justify-content-center animate-fade">
+  <div class="col-md-6">
+    <!-- Page Title -->
+    <h2 class="text-center mb-4 text-white fw-bold">Change Your Password</h2>
+
+    <!-- Error Messages -->
+    <!-- Renders error messages if the form submission has any issues -->
+    <%= render "devise/shared/error_messages", resource: resource %>
+
+    <!-- Change Password Form -->
+    <div class="card shadow-lg border-dark animate-slide-in">
+      <div class="card-body">
+        <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }, class: "form") do |f| %>
+          <!-- Hidden Reset Token -->
+          <%= f.hidden_field :reset_password_token %>
+
+          <!-- New Password Field -->
+          <div class="mb-3">
+            <%= f.label :password, "New Password", class: "form-label fw-bold text-dark" %>
+            <% if @minimum_password_length %>
+              <small class="text-muted">(<%= @minimum_password_length %> characters minimum)</small>
+            <% end %>
+            <%= f.password_field :password, autofocus: true, autocomplete: "new-password", class: "form-control border-dark shadow-sm", placeholder: "Enter your new password" %>
+          </div>
+
+          <!-- Confirm New Password Field -->
+          <div class="mb-3">
+            <%= f.label :password_confirmation, "Confirm New Password", class: "form-label fw-bold text-dark" %>
+            <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control border-dark shadow-sm", placeholder: "Confirm your new password" %>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="d-grid">
+            <%= f.submit "Change My Password", class: "btn btn-dark shadow-sm btn-lg" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Back to Login Link -->
+    <!-- Provides a link to return to the login page -->
+    <div class="text-center mt-3">
+      <%= link_to "Back to Login", new_user_session_path, class: "text-decoration-none text-white fw-bold" %>
+    </div>
+  </div>
+</div>

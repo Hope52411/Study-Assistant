@@ -1,0 +1,47 @@
+<div class="row justify-content-center animate-fade">
+  <div class="col-md-6">
+    <!-- Page Title -->
+    <!-- Displays the title "Forgot Your Password?" in white and bold, centered -->
+    <h1 class="text-center mb-4 text-white fw-bold">Forgot Your Password?</h1>
+
+    <!-- Description -->
+    <!-- Instructions for the user to reset their password -->
+    <p class="text-center text-white">
+      Enter your email address below, and we will send you instructions to reset your password.
+    </p>
+
+    <!-- Error Messages -->
+    <!-- Displays error messages if there are issues with the form -->
+    <% if resource.errors.any? %>
+      <div class="alert alert-danger shadow-sm animate-bounce" role="alert">
+        <ul class="mb-0">
+          <% resource.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <!-- Forgot Password Form -->
+    <div class="card shadow-lg border-dark animate-slide-in">
+      <div class="card-body">
+        <%= form_with model: resource, as: resource_name, url: password_path(resource_name), local: true, class: 'form' do |f| %>
+          <!-- Email Input Field -->
+          <div class="mb-3">
+            <%= f.label :email, "Email", class: "form-label fw-bold text-dark" %>
+            <%= f.email_field :email, autofocus: true, class: "form-control border-dark shadow-sm", placeholder: "Enter your email" %>
+          </div>
+
+          <!-- Submit Button -->
+          <%= f.submit "Send Reset Instructions", class: "btn btn-dark w-100 shadow-sm btn-lg" %>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Back to Login Link -->
+    <!-- Provides a link for the user to navigate back to the login page -->
+    <div class="text-center mt-3">
+      <%= link_to "Back to Login", new_user_session_path, class: "text-decoration-none text-white fw-bold" %>
+    </div>
+  </div>
+</div>

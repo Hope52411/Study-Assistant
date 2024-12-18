@@ -1,0 +1,49 @@
+<div class="container mt-4 position-relative">
+  <!-- Back button at the top-right corner -->
+  <%= link_to 'Back', plans_path, class: 'btn btn-secondary btn-lg shadow-sm animate-fade position-absolute', style: 'top: 0; right: 0;' %>
+
+  <!-- Page title: dynamically displays 'Create a New Plan' or 'Edit The Plan' -->
+  <h1 class="text-center mb-4 text-white">
+    <%= @plan.new_record? ? 'Create a New Plan' : 'Edit The Plan' %>
+  </h1>
+
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow-lg border-dark">
+        <div class="card-body">
+          <!-- Form for creating or editing a plan -->
+          <%= form_with model: @plan, local: true, class: "form" do |f| %>
+            <!-- Plan Name -->
+            <div class="mb-3">
+              <%= f.label :name, 'Plan Name', class: "form-label fw-bold text-dark" %>
+              <%= f.text_field :name, class: "form-control border-dark", placeholder: "Enter the plan name" %>
+            </div>
+
+            <!-- Plan Description -->
+            <div class="mb-3">
+              <%= f.label :description, 'Plan Description', class: "form-label fw-bold text-dark" %>
+              <%= f.text_area :description, class: "form-control border-dark", rows: 2, placeholder: "Enter a brief description of the plan" %>
+            </div>
+
+            <!-- Start Time -->
+            <div class="mb-3">
+              <%= f.label :start_time, 'Start Time', class: "form-label fw-bold text-dark" %>
+              <%= f.datetime_select :start_time, { default: Time.current }, class: "form-select border-dark" %>
+            </div>
+
+            <!-- End Time -->
+            <div class="mb-3">
+              <%= f.label :end_time, 'End Time', class: "form-label fw-bold text-dark" %>
+              <%= f.datetime_select :end_time, { default: Time.current + 1.day }, class: "form-select border-dark" %>
+            </div>
+
+            <!-- Submit button: dynamically shows 'Create Plan' or 'Update Plan' -->
+            <div class="d-grid">
+              <%= f.submit @plan.new_record? ? 'Create Plan' : 'Update Plan', class: "btn btn-primary btn-lg shadow-sm animate-fade" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

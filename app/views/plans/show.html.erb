@@ -1,0 +1,8 @@
+<h1><%= @plan.name %></h1>
+<p><strong>Description:</strong> <%= @plan.description %></p>
+<p><strong>Start Time:</strong> <%= @plan.start_time %></p>
+<p><strong>End Time:</strong> <%= @plan.end_time %></p>
+
+<%= link_to 'Edit', edit_plan_path(@plan) %> |
+<%= link_to 'Delete', plan_path(@plan), method: :delete, data: { confirm: 'Are you sure to delete ?' } %> |
+<%= link_to 'Back', plans_path %>

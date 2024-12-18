@@ -1,0 +1,79 @@
+<div class="container mt-4 position-relative">
+  <!-- Back Button -->
+  <!-- Positioned at the top-right corner -->
+  <%= link_to 'Back', plans_path, class: 'btn btn-secondary btn-lg shadow-sm animate-fade position-absolute', style: 'top: 0; right: 0;' %>
+
+  <!-- Page Title -->
+  <!-- Dynamically displays 'Create a New Plan' or 'Edit The Plan' based on whether the plan is new -->
+  <h1 class="text-center mb-4 text-white">
+    <%= @plan.new_record? ? 'Create a New Plan' : 'Edit The Plan' %>
+  </h1>
+
+  <!-- Form Section -->
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <!-- Card Container for the Form -->
+      <div class="card shadow-lg border-dark">
+        <div class="card-body">
+          <!-- Form for creating or editing a plan -->
+          <%= form_with model: @plan, local: true, class: "form" do |f| %>
+            <!-- Plan Name Field -->
+            <div class="mb-3">
+              <%= f.label :name, 'Plan Name', class: "form-label fw-bold text-dark" %>
+              <%= f.text_field :name, class: "form-control border-dark", placeholder: "Enter the plan name" %>
+            </div>
+
+            <!-- Plan Description Field -->
+            <div class="mb-3">
+              <%= f.label :description, 'Plan Description', class: "form-label fw-bold text-dark" %>
+              <%= f.text_area :description, class: "form-control border-dark", rows: 2, placeholder: "Enter a brief description of the plan" %>
+            </div>
+
+            <!-- Start Time Field -->
+            <div class="mb-3">
+              <%= f.label :start_time, 'Start Time', class: "form-label fw-bold text-dark" %>
+              <div class="input-group">
+                <%= f.datetime_select :start_time, { default: Time.current }, class: "form-select border-dark" %>
+              </div>
+            </div>
+
+            <!-- End Time Field -->
+            <div class="mb-3">
+              <%= f.label :end_time, 'End Time', class: "form-label fw-bold text-dark" %>
+              <div class="input-group">
+                <%= f.datetime_select :end_time, { default: Time.current + 1.day }, class: "form-select border-dark" %>
+              </div>
+            </div>
+
+            <!-- Reference Plan Field -->
+            <div class="mb-3">
+              <%= f.label :reference_plan, 'Reference Plan', class: "form-label fw-bold text-dark" %>
+              <%= f.text_area :reference_plan, class: "form-control border-dark", rows: 6, placeholder: "AI Generated Reference Plan" %>
+            </div>
+
+            <!-- AI Generate Button -->
+            <!-- Trigger to generate a reference plan using AI -->
+            <div class="mb-3 text-center">
+              <%= link_to 'AI Generates a Reference Plan', generate_reference_plan_plan_path(@plan), 
+                          method: :post, 
+                          data: { confirm: 'Are you sure to use AI to generate a reference plan?' }, 
+                          class: 'btn btn-info btn-lg shadow-sm animate-fade' %>
+            </div>
+
+            <!-- Save Button -->
+            <!-- Submits the form to save the plan -->
+            <div class="d-grid mb-3">
+              <%= f.submit 'Save', class: 'btn btn-success btn-lg shadow-sm animate-fade' %>
+            </div>
+
+            <!-- Export to PDF Button -->
+            <!-- Exports the plan to a PDF file -->
+            <div class="d-grid mb-3">
+              <%= link_to 'Export to PDF', export_pdf_plan_path(@plan), target: '_blank', class: 'btn btn-primary btn-lg shadow-sm animate-fade' %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
