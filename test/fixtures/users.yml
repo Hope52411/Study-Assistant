@@ -2,8 +2,6 @@
 
 one:
   email: user1@example.com
-  name: User One
 
 two:
   email: user2@example.com
-  name: User Two
