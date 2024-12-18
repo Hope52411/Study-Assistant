@@ -2,6 +2,9 @@ ENV["RAILS_ENV"] ||= "test"
 require_relative "../config/environment"
 require "rails/test_help"
 
+class ActiveSupport::TestCase
+  include Devise::Test::IntegrationHelpers
+end
 # 引入 DatabaseCleaner 清理数据库
 require "database_cleaner/active_record"
 
