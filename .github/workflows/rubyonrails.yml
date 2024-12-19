@@ -20,7 +20,7 @@ jobs:
           POSTGRES_PASSWORD: 167349xxz..
     env:
       RAILS_ENV: test
-      DATABASE_URL: "postgres://${{ secrets.DB_USER }}:${{ secrets.DB_PASSWORD }}@localhost:5432/rails_test"
+      DATABASE_URL: "postgres://postgres:167349xxz..@localhost:5432/rails_test"
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
