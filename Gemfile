@@ -41,7 +41,10 @@ gem "httparty"
 gem "stringio", "~> 3.1.2"
 gem "bootstrap", "~> 5.3.0"
 gem "sassc-rails", ">= 2.0.1"
-
+gem "bundler-audit"
+gem "ruby_audit"
+gem "rubocop-rails"
+gem "rubocop"
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
