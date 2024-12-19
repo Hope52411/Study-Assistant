@@ -1,7 +1,7 @@
 default: &default
   adapter: postgresql
   encoding: unicode
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  pool: 5 
   host: <%= ENV['POSTGRES_HOST'] || 'localhost' %>  # 默认连接本地主机，可通过环境变量覆盖
   username: <%= ENV['POSTGRES_USERNAME'] %>         # 从环境变量读取用户名
   password: <%= ENV['POSTGRES_PASSWORD'] %>         # 从环境变量读取密码
