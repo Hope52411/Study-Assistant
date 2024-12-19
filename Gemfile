@@ -66,7 +66,7 @@ group :test do
   gem "capybara"
   gem "database_cleaner-active_record"
   gem "selenium-webdriver"
-  gem 'rspec-rails'
+  gem "rspec-rails"
 end
 
 
