@@ -15,9 +15,9 @@ jobs:
         ports:
           - "5432:5432"
         env:
-          POSTGRES_DB: rails_test
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: 167349xxz..
+          POSTGRES_DB: study_assistant_test
+          POSTGRES_USERNAME: <%= ENV['POSTGRES_USERNAME'] %>
+          POSTGRES_PASSWORD: <%= ENV['POSTGRES_PASSWORD'] %>
     env:
       RAILS_ENV: test
       DATABASE_URL: "postgres://${{ secrets.DB_USER }}:${{ secrets.DB_PASSWORD }}@localhost:5432/rails_test"
