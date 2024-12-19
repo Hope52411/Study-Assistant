@@ -20,4 +20,5 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
   config.active_record.attributes_for_inspect = [ :id ]
   config.hosts << "3.87.26.172"
+  config.hosts << "127.0.0.1"
 end
