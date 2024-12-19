@@ -10,19 +10,17 @@ jobs:
   test:
     runs-on: ubuntu-latest
     services:
-  postgres:
-    image: postgres:13-alpine
-    ports:
-      - "5432:5432"
+      postgres:
+        image: postgres:13-alpine
+        ports:
+          - "5432:5432"
+        env:
+          POSTGRES_DB: rails_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: 167349xxz..
     env:
-      POSTGRES_DB: rails_test
-      POSTGRES_USER: ${{ secrets.DB_USER }} 
-      POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
-
-   env:
-  RAILS_ENV: test
-  DATABASE_URL: "postgres://${{ secrets.DB_USER }}:${{ secrets.DB_PASSWORD }}@localhost:5432/study_assistant_test"
-
+      RAILS_ENV: test
+      DATABASE_URL: "postgres://${{ secrets.DB_USER }}:${{ secrets.DB_PASSWORD }}@localhost:5432/rails_test"
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
