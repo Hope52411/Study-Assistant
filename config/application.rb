@@ -7,7 +7,7 @@ require "rails/all"
 Bundler.require(*Rails.groups)
 
 # Ensure dotenv is loaded for specific environments
-require 'dotenv'
+require "dotenv"
 Dotenv.load if %w[development test production].include?(Rails.env)
 
 module StudyAssistant
