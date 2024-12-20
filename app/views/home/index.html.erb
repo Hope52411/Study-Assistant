@@ -1,6 +1,22 @@
-<div class="container mt-4 text-center">
-  <h1>Welcome to Study Assistant</h1>
-  <p><%= link_to 'Log in', new_user_session_path, class: 'btn btn-primary' %></p>
-  <p><%= link_to 'Sign up', new_user_registration_path, class: 'btn btn-success' %></p>
+<div class="container mt-5 text-center">
+  <!-- 标题 -->
+  <h1 class="text-white fw-bold display-4 mb-4">Welcome to Study Assistant</h1>
+  <p class="text-white fs-5">Manage your plans and tasks with ease!</p>
+
+  <!-- 按钮组 -->
+  <div class="d-flex justify-content-center gap-3 mt-4">
+    <%= link_to 'Log in', new_user_session_path, class: 'btn btn-primary btn-lg px-5 shadow-sm animate-hover' %>
+    <%= link_to 'Sign up', new_user_registration_path, class: 'btn btn-success btn-lg px-5 shadow-sm animate-hover' %>
+  </div>
 </div>
 
+<!-- 添加一些额外样式和动画 -->
+<style>
+  .animate-hover {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .animate-hover:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  }
+</style>
