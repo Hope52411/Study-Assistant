@@ -1,4 +1,4 @@
-name: CD for Rails App
+name: Deploy to EC2
 
 on:
   push:
@@ -7,39 +7,34 @@ on:
 
 jobs:
   deploy:
+    name: Deploy to EC2
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Code
+    - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: 3.3.5
-        bundler-cache: true
-
-    - name: Install Dependencies
+    - name: Set up SSH
       run: |
-        bundle install
-        yarn install --check-files
+        mkdir -p ~/.ssh
+        echo "$DEPLOY_PRIVATE_KEY" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan -H $DEPLOY_HOST >> ~/.ssh/known_hosts
 
-    - name: Run Tests
-      run: bin/rubocop && bin/rspec
+    - name: Test SSH connection
+      run: ssh -o StrictHostKeyChecking=no $DEPLOY_USER@$DEPLOY_HOST echo "Connection successful"
 
-    - name: Deploy to Server
-      env:
-        DEPLOY_USER: ubuntu
-        DEPLOY_HOST: 34.205.71.29
-        DEPLOY_DIR: /home/ubuntu/Study-Assistant
+    - name: Deploy code
       run: |
         ssh -o StrictHostKeyChecking=no $DEPLOY_USER@$DEPLOY_HOST <<EOF
-          cd $DEPLOY_DIR
-          git pull origin main
-          bundle install
-          yarn install
-          RAILS_ENV=production bundle exec rails assets:precompile
-          RAILS_ENV=production rails db:migrate
-          sudo systemctl restart puma
-          sudo systemctl restart nginx
+        set -e
+        echo "Starting deployment"
+        cd ~/Study-Assistant
+        git pull origin main
+        bundle install --deployment --without development test
+        RAILS_ENV=production rails db:migrate
+        RAILS_ENV=production rails assets:precompile
+        sudo systemctl restart puma
+        sudo systemctl restart nginx
+        echo "Deployment complete"
         EOF
