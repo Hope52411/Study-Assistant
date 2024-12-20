@@ -64,7 +64,7 @@
           <!-- Edit and Delete buttons -->
           <div class="d-flex">
             <%= link_to 'Edit', edit_plan_path(plan), class: 'btn btn-primary btn-sm shadow-sm me-2', style: "width: 120px;" %>
-            <%= link_to 'Delete', plan_path(plan), method: :delete, data: { confirm: 'Are you sure to delete?' }, class: 'btn btn-danger btn-sm shadow-sm', style: "width: 120px;" %>
+            <%= button_to 'Delete', plan_path(plan), method: :delete, data: { confirm: 'Are you sure to delete?' }, class: 'btn btn-danger btn-sm shadow-sm', style: "width: 120px;" %>
           </div>
         </div>
       <% end %>
