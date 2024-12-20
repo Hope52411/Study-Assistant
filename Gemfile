@@ -67,7 +67,7 @@ group :test do
   gem "database_cleaner-active_record"
   gem "selenium-webdriver"
   gem "rspec-rails"
-  gem 'factory_bot_rails'
+  gem "factory_bot_rails"
 end
 
 
@@ -75,4 +75,4 @@ gem "prawn", "~> 2.5"
 
 gem "faker", "~> 3.5"
 
-gem 'pdf-reader'
+gem "pdf-reader"

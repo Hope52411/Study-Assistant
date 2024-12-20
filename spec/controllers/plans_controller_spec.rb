@@ -6,7 +6,7 @@ RSpec.describe PlansController, type: :controller do
 
   # Define a test user
   let(:user) { User.create(email: "test@example.com", password: "password") }
-  
+
   # Define a test plan associated with the user
   let(:plan) do
     Plan.create(
@@ -63,7 +63,7 @@ RSpec.describe PlansController, type: :controller do
     it "generates a reference plan using OpenAI" do
       # Mock OpenAI API response
       allow_any_instance_of(PlansController).to receive(:call_openai_to_generate_plan).and_return("This is a generated plan.")
-      
+
       post :generate_reference_plan, params: { id: plan.id }
       plan.reload
 
@@ -74,7 +74,7 @@ RSpec.describe PlansController, type: :controller do
     it "handles OpenAI failure gracefully" do
       # Mock OpenAI API failure
       allow_any_instance_of(PlansController).to receive(:call_openai_to_generate_plan).and_return("Unable to generate reference plan, please try again later.")
-      
+
       post :generate_reference_plan, params: { id: plan.id }
       plan.reload
 

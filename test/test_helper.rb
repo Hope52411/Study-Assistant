@@ -10,12 +10,11 @@ require "database_cleaner/active_record"
 
 
 DatabaseCleaner.allow_remote_database_url = true
-DatabaseCleaner.clean_with(:truncation) 
-DatabaseCleaner.strategy = :transaction 
+DatabaseCleaner.clean_with(:truncation)
+DatabaseCleaner.strategy = :transaction
 
 module ActiveSupport
   class TestCase
-
     fixtures :all
 
     setup { DatabaseCleaner.start }

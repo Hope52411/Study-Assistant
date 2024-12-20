@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "Plans Integration Tests", type: :system do
   before do
-    driven_by(:selenium, using: :chrome, screen_size: [1400, 1100])  
+    driven_by(:selenium, using: :chrome, screen_size: [ 1400, 1100 ])
   end
 
   # Create a test user with a unique email
