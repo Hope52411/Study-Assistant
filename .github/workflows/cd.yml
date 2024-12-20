@@ -19,7 +19,13 @@ jobs:
         mkdir -p ~/.ssh
         echo "$DEPLOY_PRIVATE_KEY" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
+        if [ -z "$DEPLOY_HOST" ]; then
+          echo "DEPLOY_HOST is not set. Please check your environment variables."
+          exit 1
+        fi
         ssh-keyscan -H $DEPLOY_HOST >> ~/.ssh/known_hosts
+        echo "SSH setup complete. Known hosts:"
+        cat ~/.ssh/known_hosts
 
     - name: Test SSH connection
       run: ssh -o StrictHostKeyChecking=no $DEPLOY_USER@$DEPLOY_HOST echo "Connection successful"
