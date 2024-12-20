@@ -49,7 +49,7 @@ Rails.application.configure do
   config.active_record.attributes_for_inspect = [ :id ]
 
   # 配置允许的主机
-  config.hosts << "3.87.26.172"
+  config.hosts << "44.202.141.179"
   config.hosts << "127.0.0.1"
   config.hosts << "localhost"
 end
