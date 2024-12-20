@@ -13,7 +13,7 @@ jobs:
       postgres:
         image: postgres:13-alpine
         ports:
-          - "5432:5432"
+          - "5432:5432" # 可替换为 "5433:5432" 避免端口冲突
         env:
           POSTGRES_DB: rails_test
           POSTGRES_USER: postgres
@@ -24,6 +24,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
       - name: Cache gems
         uses: actions/cache@v3
         with:
@@ -31,12 +32,31 @@ jobs:
           key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
           restore-keys: |
             ${{ runner.os }}-gems-
+
       - name: Install Ruby and gems
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16 # 根据你的项目使用的 Node.js 版本调整
+
+      - name: Install Yarn
+        run: npm install -g yarn
+
+      - name: Install dependencies
+        run: |
+          yarn install
+          bundle install
+
+      - name: Precompile Webpacker assets
+        run: bin/rails webpacker:compile
+
       - name: Set up database schema
         run: bin/rails db:create db:migrate
+
       - name: Run tests
         run: bin/rspec
 
@@ -45,6 +65,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
       - name: Cache gems
         uses: actions/cache@v3
         with:
@@ -52,15 +73,33 @@ jobs:
           key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
           restore-keys: |
             ${{ runner.os }}-gems-
+
       - name: Install Ruby and gems
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install Yarn
+        run: npm install -g yarn
+
+      - name: Install dependencies
+        run: |
+          yarn install
+          bundle install
+
       - name: Generate binstubs
         run: bundle binstubs bundler-audit brakeman rubocop
+
       - name: Security audit dependencies
         run: bin/bundler-audit --update
+
       - name: Security audit application code
         run: bin/brakeman -q -w2
+
       - name: Lint Ruby files
         run: bin/rubocop --parallel
