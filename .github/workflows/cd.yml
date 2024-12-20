@@ -1,49 +1,60 @@
-name: Deploy to Production
+name: Deploy to Production  # The name of the workflow, describing its purpose.
 
 on:
   push:
     branches:
-      - main  # Trigger deployment on push to main
+      - main  # Trigger the deployment process when code is pushed to the 'main' branch.
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest  # Use latest Ubuntu environment
+    runs-on: ubuntu-latest  # Specify the latest Ubuntu environment for the job.
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4  # Checkout code from repository
+        uses: actions/checkout@v4  # Use the GitHub-provided action to fetch the repository's code.
 
       - name: Set up SSH
         env:
-          DEPLOY_PRIVATE_KEY: ${{ secrets.DEPLOY_PRIVATE_KEY }}
-          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_PRIVATE_KEY: ${{ secrets.DEPLOY_PRIVATE_KEY }}  # Use GitHub Secrets for the SSH private key.
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}  # Use GitHub Secrets for the server's hostname or IP.
         run: |
-          # Set up SSH keys for connection
-          mkdir -p ~/.ssh
-          echo "$DEPLOY_PRIVATE_KEY" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H $DEPLOY_HOST >> ~/.ssh/known_hosts
+          # Configure SSH for secure access to the deployment server.
+          mkdir -p ~/.ssh  # Create the SSH directory if it doesn't exist.
+          echo "$DEPLOY_PRIVATE_KEY" > ~/.ssh/id_rsa  # Save the private key to a file.
+          chmod 600 ~/.ssh/id_rsa  # Set the correct permissions for the private key.
+          ssh-keyscan -H $DEPLOY_HOST >> ~/.ssh/known_hosts  # Add the server's host key to known_hosts.
 
       - name: Debug environment variables
         env:
-          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
-          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}  # Use GitHub Secrets for the server's hostname or IP.
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}  # Use GitHub Secrets for the server's username.
         run: |
-          # Print environment variables for debugging
+          # Output environment variables for debugging purposes.
           echo "DEPLOY_HOST=$DEPLOY_HOST"
           echo "DEPLOY_USER=$DEPLOY_USER"
 
       - name: Deploy application
         env:
-          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
-          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}  # Server hostname or IP from GitHub Secrets.
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}  # Deployment username from GitHub Secrets.
         run: |
-          # SSH into the server and deploy the app
+          # SSH into the server and execute deployment steps.
           ssh -o StrictHostKeyChecking=no $DEPLOY_USER@$DEPLOY_HOST <<EOF
-          cd /home/$DEPLOY_USER/Study-Assistant
-          git pull origin main
-          RAILS_ENV=production bundle install
-          RAILS_ENV=production rails db:migrate
-          RAILS_ENV=production rails assets:precompile
-          sudo systemctl restart nginx
+          # Navigate to the application's directory.
+          cd /home/$DEPLOY_USER/Study-Assistant  
+
+          # Pull the latest changes from the 'main' branch of the repository.
+          git pull origin main  
+
+          # Install the required Ruby gems for the production environment.
+          RAILS_ENV=production bundle install  
+
+          # Apply any new database migrations to ensure the schema is up to date.
+          RAILS_ENV=production rails db:migrate  
+
+          # Precompile assets like JavaScript, CSS, and images for efficient production use.
+          RAILS_ENV=production rails assets:precompile  
+
+          # Restart the Nginx web server to apply the latest changes to the application.
+          sudo systemctl restart nginx  
           EOF
