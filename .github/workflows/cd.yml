@@ -3,34 +3,33 @@ name: Deploy to Production
 on:
   push:
     branches:
-      - main
+      - main  # Trigger deployment on push to main
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  # Use latest Ubuntu environment
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4  # Checkout code from repository
 
       - name: Set up SSH
         env:
           DEPLOY_PRIVATE_KEY: ${{ secrets.DEPLOY_PRIVATE_KEY }}
           DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
         run: |
-          echo "Setting up SSH..."
+          # Set up SSH keys for connection
           mkdir -p ~/.ssh
           echo "$DEPLOY_PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H $DEPLOY_HOST >> ~/.ssh/known_hosts
-          echo "SSH setup complete. Known hosts:"
-          cat ~/.ssh/known_hosts
 
       - name: Debug environment variables
         env:
           DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
           DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
         run: |
+          # Print environment variables for debugging
           echo "DEPLOY_HOST=$DEPLOY_HOST"
           echo "DEPLOY_USER=$DEPLOY_USER"
 
@@ -39,14 +38,12 @@ jobs:
           DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
           DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
         run: |
-          echo "Starting deployment to $DEPLOY_HOST..."
+          # SSH into the server and deploy the app
           ssh -o StrictHostKeyChecking=no $DEPLOY_USER@$DEPLOY_HOST <<EOF
-          echo "Connected to server"
           cd /home/$DEPLOY_USER/Study-Assistant
           git pull origin main
           RAILS_ENV=production bundle install
           RAILS_ENV=production rails db:migrate
           RAILS_ENV=production rails assets:precompile
           sudo systemctl restart nginx
-          echo "Deployment complete!"
           EOF
