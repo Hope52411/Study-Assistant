@@ -68,5 +68,4 @@ Rails.application.configure do
   config.webpacker.check_yarn_integrity = false
   config.assets.compile = true
   config.public_file_server.enabled = true
-
 end
