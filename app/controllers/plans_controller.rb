@@ -38,7 +38,7 @@ class PlansController < ApplicationController
     @plan.destroy
     redirect_to plans_path, notice: "Plan deleted!!!"
   end
-  
+
   def generate_reference_plan
     if @plan.persisted?
       generated_plan = call_openai_to_generate_plan(@plan.description, @plan.start_time, @plan.end_time)
