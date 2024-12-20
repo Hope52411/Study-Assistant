@@ -1,0 +1,45 @@
+name: CD for Rails App
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 3.3.5
+        bundler-cache: true
+
+    - name: Install Dependencies
+      run: |
+        bundle install
+        yarn install --check-files
+
+    - name: Run Tests
+      run: bin/rubocop && bin/rspec
+
+    - name: Deploy to Server
+      env:
+        DEPLOY_USER: ubuntu
+        DEPLOY_HOST: 34.205.71.29
+        DEPLOY_DIR: /home/ubuntu/Study-Assistant
+      run: |
+        ssh -o StrictHostKeyChecking=no $DEPLOY_USER@$DEPLOY_HOST <<EOF
+          cd $DEPLOY_DIR
+          git pull origin main
+          bundle install
+          yarn install
+          RAILS_ENV=production bundle exec rails assets:precompile
+          RAILS_ENV=production rails db:migrate
+          sudo systemctl restart puma
+          sudo systemctl restart nginx
+        EOF
