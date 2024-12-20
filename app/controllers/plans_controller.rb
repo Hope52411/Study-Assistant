@@ -1,11 +1,11 @@
 class PlansController < ApplicationController
   before_action :authenticate_user!  # Ensure user is logged in before accessing any action.
-  before_action :set_plan, only: [ :show, :edit, :update, :destroy, :generate_reference_plan, :export_pdf ]  
+  before_action :set_plan, only: [ :show, :edit, :update, :destroy, :generate_reference_plan, :export_pdf ]
   # Load the specific plan for these actions.
 
   # List all plans, with optional search functionality
   def index
-    if params[:query].present?  
+    if params[:query].present?
       # Search plans by name or description containing the query string.
       @plans = current_user.plans.where(
         Plan.arel_table[:name].matches("%#{params[:query]}%")
@@ -60,19 +60,19 @@ class PlansController < ApplicationController
   # Generate a reference plan using OpenAI
   def generate_reference_plan
     if @plan.persisted?  # Ensure the plan is saved in the database before generating a reference.
-      generated_plan = call_openai_to_generate_plan(@plan.description, @plan.start_time, @plan.end_time)  
+      generated_plan = call_openai_to_generate_plan(@plan.description, @plan.start_time, @plan.end_time)
       # Call OpenAI API to generate the plan.
 
       @plan.reference_plan = generated_plan  # Assign the generated plan.
       if @plan.save
-        Rails.logger.info "The reference plan is saved successfully: #{@plan.reference_plan}"  
+        Rails.logger.info "The reference plan is saved successfully: #{@plan.reference_plan}"
         # Log success if the generated plan is saved.
       else
-        Rails.logger.error "The reference plan save failure: #{@plan.errors.full_messages.join(', ')}"  
+        Rails.logger.error "The reference plan save failure: #{@plan.errors.full_messages.join(', ')}"
         # Log failure with error messages.
       end
     else
-      Rails.logger.error "The plan is not saved so the reference plan cannot be generated"  
+      Rails.logger.error "The plan is not saved so the reference plan cannot be generated"
       # Log an error if the plan is not saved yet.
     end
     redirect_to edit_plan_path(@plan)  # Redirect back to the edit page for the plan.
