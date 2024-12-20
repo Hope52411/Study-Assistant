@@ -1,4 +1,4 @@
-name: Deploy to Production  # The name of the workflow, describing its purpose.
+name: CD  # The name of the workflow, describing its purpose.
 
 on:
   push:
