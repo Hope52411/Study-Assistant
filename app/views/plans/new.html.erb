@@ -7,6 +7,7 @@
     <%= @plan.new_record? ? 'Create a New Plan' : 'Edit The Plan' %>
   </h1>
 
+
   <div class="row justify-content-center">
     <div class="col-md-8">
       <div class="card shadow-lg border-dark">
@@ -25,16 +26,20 @@
               <%= f.text_area :description, class: "form-control border-dark", rows: 2, placeholder: "Enter a brief description of the plan" %>
             </div>
 
-            <!-- Start Time -->
+           <!-- Start Time Field -->
             <div class="mb-3">
               <%= f.label :start_time, 'Start Time', class: "form-label fw-bold text-dark" %>
-              <%= f.datetime_select :start_time, { default: Time.current }, class: "form-select border-dark" %>
+              <div class="input-group">
+                <%= f.datetime_select :start_time, { default: Time.current }, class: "form-select border-dark" %>
+              </div>
             </div>
 
-            <!-- End Time -->
+            <!-- End Time Field -->
             <div class="mb-3">
               <%= f.label :end_time, 'End Time', class: "form-label fw-bold text-dark" %>
-              <%= f.datetime_select :end_time, { default: Time.current + 1.day }, class: "form-select border-dark" %>
+              <div class="input-group">
+                <%= f.datetime_select :end_time, { default: Time.current + 1.day }, class: "form-select border-dark" %>
+              </div>
             </div>
 
             <!-- Submit button: dynamically shows 'Create Plan' or 'Update Plan' -->
