@@ -48,5 +48,7 @@ jobs:
           RAILS_ENV=production rails db:migrate
           RAILS_ENV=production rails assets:precompile
           sudo systemctl restart nginx
+          pkill -f puma
+          RAILS_ENV=production bundle exec puma -C config/puma.rb &
           echo "Deployment complete!"
           EOF
