@@ -1,4 +1,4 @@
-name: Deploy to EC2
+name: Deploy to Production
 
 on:
   push:
@@ -7,40 +7,46 @@ on:
 
 jobs:
   deploy:
-    name: Deploy to EC2
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Set up SSH
-      run: |
-        mkdir -p ~/.ssh
-        echo "$DEPLOY_PRIVATE_KEY" > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
-        if [ -z "$DEPLOY_HOST" ]; then
-          echo "DEPLOY_HOST is not set. Please check your environment variables."
-          exit 1
-        fi
-        ssh-keyscan -H $DEPLOY_HOST >> ~/.ssh/known_hosts
-        echo "SSH setup complete. Known hosts:"
-        cat ~/.ssh/known_hosts
+      - name: Set up SSH
+        env:
+          DEPLOY_PRIVATE_KEY: ${{ secrets.DEPLOY_PRIVATE_KEY }}
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+        run: |
+          echo "Setting up SSH..."
+          mkdir -p ~/.ssh
+          echo "$DEPLOY_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H $DEPLOY_HOST >> ~/.ssh/known_hosts
+          echo "SSH setup complete. Known hosts:"
+          cat ~/.ssh/known_hosts
 
-    - name: Test SSH connection
-      run: ssh -o StrictHostKeyChecking=no $DEPLOY_USER@$DEPLOY_HOST echo "Connection successful"
+      - name: Debug environment variables
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+        run: |
+          echo "DEPLOY_HOST=$DEPLOY_HOST"
+          echo "DEPLOY_USER=$DEPLOY_USER"
 
-    - name: Deploy code
-      run: |
-        ssh -o StrictHostKeyChecking=no $DEPLOY_USER@$DEPLOY_HOST <<EOF
-        set -e
-        echo "Starting deployment"
-        cd ~/Study-Assistant
-        git pull origin main
-        bundle install --deployment --without development test
-        RAILS_ENV=production rails db:migrate
-        RAILS_ENV=production rails assets:precompile
-        sudo systemctl restart puma
-        sudo systemctl restart nginx
-        echo "Deployment complete"
-        EOF
+      - name: Deploy application
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+        run: |
+          echo "Starting deployment to $DEPLOY_HOST..."
+          ssh -o StrictHostKeyChecking=no $DEPLOY_USER@$DEPLOY_HOST <<EOF
+          echo "Connected to server"
+          cd /home/$DEPLOY_USER/Study-Assistant
+          git pull origin main
+          RAILS_ENV=production bundle install
+          RAILS_ENV=production rails db:migrate
+          RAILS_ENV=production rails assets:precompile
+          sudo systemctl restart nginx
+          echo "Deployment complete!"
+          EOF
