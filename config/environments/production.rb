@@ -37,18 +37,17 @@ Rails.application.configure do
   config.hosts << "127.0.0.1"
   config.hosts << "localhost"
   config.action_mailer.smtp_settings = {
-  address: "smtp.gmail.com",               
-  port: 587,                              
-  domain: "your-server-ip-or-placeholder.com", 
-  user_name: ENV["GMAIL_USERNAME"],         
-  password: ENV["GMAIL_PASSWORD"],       
+  address: "smtp.gmail.com",
+  port: 587,
+  domain: "your-server-ip-or-placeholder.com",
+  user_name: ENV["GMAIL_USERNAME"],
+  password: ENV["GMAIL_PASSWORD"],
   authentication: "plain",
   enable_starttls_auto: true
 }
 
-config.action_mailer.default_url_options = { 
-  host: "your-server-ip",                
-  protocol: "http"                     
+config.action_mailer.default_url_options = {
+  host: "your-server-ip",
+  protocol: "http"
 }
-
 end
