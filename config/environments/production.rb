@@ -39,7 +39,7 @@ Rails.application.configure do
   config.action_mailer.smtp_settings = {
   address: "smtp.gmail.com",
   port: 587,
-  domain: "your-server-ip-or-placeholder.com",
+  domain: "gmail.com",
   user_name: ENV["GMAIL_USERNAME"],
   password: ENV["GMAIL_PASSWORD"],
   authentication: "plain",
@@ -47,7 +47,7 @@ Rails.application.configure do
 }
 
 config.action_mailer.default_url_options = {
-  host: "your-server-ip",
-  protocol: "http"
+  host: "184.72.132.98",
+  protocol: "https"
 }
 end
